@@ -1,25 +1,25 @@
 {
 	"schema_version": 1,
 	"quilt_loader": {
-		"group": "com.example",
-		"id": "example_mod",
+		"group": "com.fauxdev.quilt",
+		"id": "fvt",
 		"version": "${version}",
 		"metadata": {
-			"name": "Mod Name",
-			"description": "A short description of your mod.",
+			"name": "Faux's Various Tools",
+			"description": "A collection of various tools I tend to use, without the useless bloat.",
 			"contributors": {
-				"Me!": "Owner"
+				"Faux": "Owner"
 			},
 			"contact": {
-				"homepage": "https://example.com/",
-				"issues": "https://github.com/QuiltMC/quilt-template-mod/issues",
-				"sources": "https://github.com/QuiltMC/quilt-template-mod"
+				"homepage": "https://github.com/TheFauxFox/FauxsVariousTools",
+				"issues": "https://github.com/TheFauxFox/FauxsVariousTools/issues",
+				"sources": "https://github.com/TheFauxFox/FauxsVariousTools"
 			},
-			"icon": "assets/example_mod/icon.png"
+			"icon": "assets/fvt/icon.png"
 		},
 		"intermediate_mappings": "net.fabricmc:intermediary",
 		"entrypoints": {
-			"init": "com.example.example_mod.ExampleMod"
+			"init": "com.fauxdev.quilt.fvt.FVT"
 		},
 		"depends": [
 			{
