@@ -4,7 +4,7 @@ import com.fauxdev.quilt.fvt.settings.FVTOptions;
 import com.fauxdev.quilt.fvt.settings.FVTSettingsScreen;
 import com.fauxdev.quilt.fvt.utils.FVTVars;
 import com.mojang.blaze3d.platform.InputUtil;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBind;
 import net.minecraft.client.option.Option;
@@ -70,7 +70,7 @@ public class FVT implements ClientModInitializer {
 		KeyBind freecamKeybind = KeyBindingHelper.registerKeyBinding(new KeyBind("fvt.freecam.name", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "FVT"));
 		KeyBind entityOutlineKeybind = KeyBindingHelper.registerKeyBinding(new KeyBind("fvt.entity_outline.name", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "FVT"));
 
-		ClientTickEvents.END_WORLD_TICK.register(client ->
+		ClientTickEvents.END.register(client ->
 		{
 			while(openSettingsMenuKeybind.wasPressed()) {
 				FVT.MC.setScreen(new FVTSettingsScreen(FVT.MC.currentScreen));
@@ -84,7 +84,7 @@ public class FVT implements ClientModInitializer {
 
 	private void registerCallbacks()
 	{
-		ClientTickEvents.END_CLIENT_TICK.register(client ->
+		ClientTickEvents.END.register(client ->
 		{
 			if(FVT.MC.player == null && FVT.OPTIONS.freecam.get()) {
 				// disables freecam if leaving a world
@@ -92,7 +92,7 @@ public class FVT implements ClientModInitializer {
 			}
 		});
 
-		ClientTickEvents.END_WORLD_TICK.register(clientWorld ->
+		ClientTickEvents.END.register(clientWorld ->
 		{
 			if(FVT.OPTIONS.toolWarning.get()) {
 				ItemStack mainHandItem = FVT.MC.player.getStackInHand(Hand.MAIN_HAND);
