@@ -22,14 +22,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 'Setup Gradle'
+      - name: 'Setup Gradle & build'
         uses: gradle/gradle-build-action@v2
-
-      - name: 'Make gradle wrapper executable'
-        run: chmod +x ./gradlew
-
-      - name: 'Build mod'
-        run: ./gradlew build
+        with:
+          arguments: build
 
       - name: 'Get mod name'
         id: mod_name
