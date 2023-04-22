@@ -27,6 +27,7 @@ jobs:
         with:
           arguments: build
           gradle-home-cache-cleanup: true
+          cache-read-only: false
 
       - name: 'Get mod name'
         id: mod_name
