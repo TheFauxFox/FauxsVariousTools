@@ -1,3 +1,5 @@
 #!/bin/bash
 
-git tag v$(grep -oP '^version = \K.*' gradle.properties)
+TAG=$(grep -oP '^version = \K.*' gradle.properties)
+git tag v"$TAG"
+git push origin HEAD v"$TAG"
