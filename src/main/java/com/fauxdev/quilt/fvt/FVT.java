@@ -94,7 +94,7 @@ public class FVT implements ClientModInitializer {
 
 		ClientTickEvents.END.register(clientWorld ->
 		{
-			if(FVT.OPTIONS.toolWarning.get()) {
+			if(FVT.OPTIONS.toolWarning.get() && MC.player != null) {
 				ItemStack mainHandItem = FVT.MC.player.getStackInHand(Hand.MAIN_HAND);
 				ItemStack offHandItem = FVT.MC.player.getStackInHand(Hand.OFF_HAND);
 
