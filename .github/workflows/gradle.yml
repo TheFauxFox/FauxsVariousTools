@@ -1,0 +1,32 @@
+name: 'Build & Publish'
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: 'Checkout Repo'
+        uses: actions/checkout@v3
+
+      - name: 'Validate gradle wrapper'
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: 'Setup JDK 17'
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: 'Make gradle wrapper executable'
+        run: chmod +x ./gradlew
+
+      - name: 'Build mod'
+        run: ./gradlew build
+
+      - name: 'Get mod version'
+        id: mod_version
+        run: echo ::set-output name=VERSION::$(grep -oP '^version = \K.*(?=-.*)' gradle.properties)

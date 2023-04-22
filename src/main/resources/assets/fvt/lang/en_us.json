@@ -1,0 +1,46 @@
+{
+  "fvt.options_title": "FVT Options",
+
+  "fvt.options.open": "Open FVT Settings",
+
+  "fvt.options.tooltips.show": "Show mod tooltips.",
+  "fvt.options.tooltips.hide": "Hide mod tooltips.",
+
+  "fvt.options.defaults": "Defaults",
+  "fvt.options.defaults.tooltip": "WARNING! This will reset all options to their default values!",
+
+  "fvt.chat_messages_prefix": "§8[§3FVT§8]§r %s",
+
+  "fvt.mod_category.tools": "Tools",
+  "fvt.mod_category.render": "Render",
+  "fvt.mod_category.misc": "Miscellaneous",
+
+  "fvt.mod.default": "Default: %s",
+
+  "fvt.mod.enabled": "%s is now enabled!",
+  "fvt.mod.disabled": "%s is now disabled!",
+
+  "fvt.noToolBreaking.name": "Prevent Breaking",
+  "fvt.noToolBreaking.tooltip": "Makes your tools stop working at certain durability (will stop at 2 durability for most tools). This includes swords, pickaxes, axes, shovels, hoes, tridents, bows and crossbows.",
+  "fvt.tool_breaking_override.name": "Tool Breaking Override",
+
+  "fvt.tool_warning.name": "Show Warning",
+  "fvt.tool_warning.tooltip": "When your active tool goes below 10% durability and have 12 or less uses a red warning text appears on your screen for two seconds.",
+  "fvt.tool_warning.text.main_hand": "Main hand tool has %d durability left!",
+  "fvt.tool_warning.text.offhand": "Offhand tool has %d durability left!",
+  "fvt.tool_warning.scale.name": "Warning Text Scale",
+  "fvt.tool_warning.scale.tooltip": "How big the warning text should be.",
+  "fvt.tool_warning.position.name": "Warning Position",
+  "fvt.tool_warning.position.tooltip": "States where the warning text should appear.",
+  "fvt.tool_warning.position.top": "Top",
+  "fvt.tool_warning.position.bottom": "Bottom",
+
+  "fvt.entity_outline.name": "Entity Outline",
+  "fvt.entity_outline.tooltip": "Makes all entities (except players) glow white and be seen through walls.",
+
+  "fvt.fullbright.name": "Fullbright",
+  "fvt.fullbright.tooltip": "Makes you see in dark just as if it was a bright day.",
+
+  "fvt.freecam.name": "Freecam",
+  "fvt.freecam.tooltip": "Allows you to leave your body and explore your surroundings. Works similar to spectator."
+}
