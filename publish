@@ -34,6 +34,9 @@ then
     TAG=$(grep -oP '^version = \K.*' gradle.properties)
     echo -e "\nNew Tag: v$TAG"
 
+    git add gradle.properties
+    git commit -m "Update to v$TAG"
+
     git tag v"$TAG"
     git push origin HEAD v"$TAG"
 fi
