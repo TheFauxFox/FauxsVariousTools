@@ -30,7 +30,7 @@ jobs:
 
       - name: 'Get mod name'
         id: mod_name
-        run: echo ::set-output name=VERSION::$(grep -oP '^version = \K.*' gradle.properties)
+        run: echo "VERSION=$(grep -oP '^version = \K.*' gradle.properties)" >> $GITHUB_OUTPUT
 
       - name: 'Publish new release'
         uses: softprops/action-gh-release@v1
