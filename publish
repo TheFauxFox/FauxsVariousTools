@@ -27,18 +27,20 @@ fi
 
 echo "Updating: $VERSION -> $MAJOR.$MINOR.$PATCH"
 
-read -r -p "Continue? [y/N] " response
-if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+read -r -p "Continue? [Y/n] " response
+if [[ "$response" =~ ^([nN][oO]|[nN])$ ]]
 then
-    sed -i "s/$VERSION\+/$MAJOR.$MINOR.$PATCH/" gradle.properties
-    TAG=$(grep -oP '^version = \K.*' gradle.properties)
-    echo -e "\nNew Tag: v$TAG"
+  echo "Cancelled"
+else
+  sed -i "s/$VERSION\+/$MAJOR.$MINOR.$PATCH/" gradle.properties
+  TAG=$(grep -oP '^version = \K.*' gradle.properties)
+  echo -e "\nNew Tag: v$TAG"
 
-    git add gradle.properties
-    git commit -m "Update to v$TAG"
+  git add gradle.properties
+  git commit -m "Update to v$TAG"
 
-    git tag v"$TAG"
-    git push origin HEAD v"$TAG"
+  git tag v"$TAG"
+  git push origin HEAD v"$TAG"
 fi
 
 
