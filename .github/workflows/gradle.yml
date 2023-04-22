@@ -1,8 +1,9 @@
 name: 'Build & Publish'
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "*.*.*-*"
 
 jobs:
   deploy:
@@ -27,6 +28,11 @@ jobs:
       - name: 'Build mod'
         run: ./gradlew build
 
-      - name: 'Get mod version'
-        id: mod_version
-        run: echo ::set-output name=VERSION::$(grep -oP '^version = \K.*(?=-.*)' gradle.properties)
+      - name: 'Get mod name'
+        id: mod_name
+        run: echo ::set-output name=VERSION::$(grep -oP '^version = \K.*' gradle.properties)
+
+      - name: 'Publish new release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: 'build/libs/fvt-${{steps.mod_version.outputs.VERSION}}.jar'
