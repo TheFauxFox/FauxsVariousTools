@@ -6,7 +6,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.ScreenTexts;
+import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -51,8 +51,8 @@ public class FVTSettingsScreen extends Screen
 					FVT.OPTIONS.reset();
 					this.client.setScreen(getNewScreen(parent));
 				})
-				.positionAndSize(6, 6, 55, 20)
-				.tooltip(Tooltip.create(Text.translatable("fvt.options.defaults.tooltip").formatted(Formatting.YELLOW)))
+				.dimensions(6, 6, 55, 20)
+				.tooltip(Tooltip.of(Text.translatable("fvt.options.defaults.tooltip").formatted(Formatting.YELLOW)))
 				.build()
 		);
 
@@ -63,15 +63,15 @@ public class FVTSettingsScreen extends Screen
 
 					if(FVT.VARS.settingsShowTooltips) {
 						buttonWidget.setMessage(Text.literal("-"));
-						buttonWidget.setTooltip(Tooltip.create(Text.translatable("fvt.options.tooltips.hide")));
+						buttonWidget.setTooltip(Tooltip.of(Text.translatable("fvt.options.tooltips.hide")));
 					}
 					else {
 						buttonWidget.setMessage(Text.literal("?"));
-						buttonWidget.setTooltip(Tooltip.create(Text.translatable("fvt.options.tooltips.show")));
+						buttonWidget.setTooltip(Tooltip.of(Text.translatable("fvt.options.tooltips.show")));
 					}
 				})
-				.positionAndSize(this.width - 26, 6, 20, 20)
-				.tooltip(Tooltip.create(Text.translatable("fvt.options.tooltips.show")))
+				.dimensions(this.width - 26, 6, 20, 20)
+				.tooltip(Tooltip.of(Text.translatable("fvt.options.tooltips.show")))
 				.build()
 		);
 
@@ -81,7 +81,7 @@ public class FVTSettingsScreen extends Screen
 					FVT.OPTIONS.write();
 					this.client.setScreen(parent);
 				})
-				.positionAndSize(this.width / 2 - 100, this.list.getBottom() + ((this.height - this.list.getBottom() - 20) / 2), 200, 20)
+				.dimensions(this.width / 2 - 100, this.list.getBottom() + ((this.height - this.list.getBottom() - 20) / 2), 200, 20)
 				.build()
 		);
 	}
@@ -91,7 +91,7 @@ public class FVTSettingsScreen extends Screen
 	{
 		this.renderBackground(matrixStack);
 		this.list.render(matrixStack, mouseX, mouseY, delta);
-		drawCenteredText(matrixStack, this.textRenderer, this.title, this.width / 2, 12, Color.WHITE.getPacked());
+		drawCenteredTextWithShadow(matrixStack, this.textRenderer, this.title, this.width / 2, 12, Color.WHITE.getPacked());
 
 		super.render(matrixStack, mouseX, mouseY, delta);
 	}
@@ -103,7 +103,7 @@ public class FVTSettingsScreen extends Screen
 	}
 
 	@Override
-	public void closeScreen()
+	public void close()
 	{
 		this.client.setScreen(parent);
 	}

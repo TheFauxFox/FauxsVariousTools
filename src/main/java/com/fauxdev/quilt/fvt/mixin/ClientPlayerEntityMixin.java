@@ -35,7 +35,7 @@ abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	@Inject(method = "dropSelectedItem", at = @At("HEAD"), cancellable = true)
 	private void onDropSelectedItem(CallbackInfoReturnable<Boolean> info)
 	{
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			info.setReturnValue(false);
 		}
 	}
@@ -44,20 +44,20 @@ abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	private void onUpdateHealth(float health, CallbackInfo info)
 	{
 		// disables freecam if you take damage while using it
-		if(this.hurtTime == 10 && FVT.OPTIONS.freecam.get()) {
-			FVT.OPTIONS.freecam.set(false);
+		if(this.hurtTime == 10 && FVT.OPTIONS.freecam.getValue()) {
+			FVT.OPTIONS.freecam.setValue(false);
 		}
 	}
 
 	@Inject(method = "tickMovement", at = @At("HEAD"))
 	private void onTickMovement(CallbackInfo info)
 	{
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			this.setVelocity(FVT.VARS.playerVelocity);
 
-			float forward = FVT.MC.player.input.forwardMovement;
+			float forward = FVT.MC.player.input.movementForward;
 			float up = (FVT.MC.player.input.jumping ? 1.0f : 0.0f) - (FVT.MC.player.input.sneaking ? 1.0f : 0.0f);
-			float side = FVT.MC.player.input.sidewaysMovement;
+			float side = FVT.MC.player.input.movementSideways;
 
 			FVT.VARS.freecamForwardSpeed = forward != 0 ? FVT_updateMotion(FVT.VARS.freecamForwardSpeed, forward) : FVT.VARS.freecamForwardSpeed * 0.5f;
 			FVT.VARS.freecamUpSpeed = up != 0 ?  FVT_updateMotion(FVT.VARS.freecamUpSpeed, up) : FVT.VARS.freecamUpSpeed * 0.5f;
@@ -86,7 +86,7 @@ abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	@Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;hasVehicle()Z", ordinal = 0))
 	private boolean hijackHasVehicle(ClientPlayerEntity player)
 	{
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			return false;
 		}
 
@@ -97,7 +97,7 @@ abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getJumpingMount()Lnet/minecraft/entity/JumpingMount;", ordinal = 0))
 	private JumpingMount hijackGetJumpingMount(ClientPlayerEntity player)
 	{
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			return null;
 		}
 
@@ -108,7 +108,7 @@ abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	@Inject(method = "tickRiding", at = @At("HEAD"), cancellable = true)
 	private void onTickRiding(CallbackInfo info)
 	{
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			super.tickRiding();
 			info.cancel();
 		}
@@ -118,7 +118,7 @@ abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	@Inject(method = "move", at = @At("HEAD"), cancellable = true)
 	private void onMove(CallbackInfo info)
 	{
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			info.cancel();
 		}
 	}
@@ -127,7 +127,7 @@ abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	@Inject(method = "isCamera", at = @At("HEAD"), cancellable = true)
 	private void onIsCamera(CallbackInfoReturnable<Boolean> info)
 	{
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			info.setReturnValue(false);
 		}
 	}
@@ -136,7 +136,7 @@ abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	@Inject(method = "isSneaking", at = @At("HEAD"), cancellable = true)
 	private void onIsSneaking(CallbackInfoReturnable<Boolean> info)
 	{
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			info.setReturnValue(false);
 		}
 	}
@@ -145,7 +145,7 @@ abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	@Override
 	public void changeLookDirection(double cursorDeltaX, double cursorDeltaY)
 	{
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			FVT.VARS.freecamYaw += cursorDeltaX * 0.15D;
 			FVT.VARS.freecamPitch = MathHelper.clamp(FVT.VARS.freecamPitch + cursorDeltaY * 0.15D, -90, 90);
 		}

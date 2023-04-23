@@ -21,7 +21,7 @@ abstract class WorldRendererMixin
 	{
 		// NOTE: Does now work in Canvas as it replaces the WorldRenderer instance and it has it's own render method
 
-		if(entity.equals(FVT.MC.player) && FVT.OPTIONS.freecam.get()) {
+		if(entity.equals(FVT.MC.player) && FVT.OPTIONS.freecam.getValue()) {
 			return 65280;
 		}
 

@@ -21,7 +21,7 @@ abstract class PlayerEntityRendererMixin<T extends Entity> extends EntityRendere
 	protected boolean hasLabel(T entity)
 	{
 		// while in freecam makes your own nametag visible
-		if(FVT.OPTIONS.freecam.get() && entity == FVT.MC.player && !FVT.MC.options.hudHidden) {
+		if(FVT.OPTIONS.freecam.getValue() && entity == FVT.MC.player && !FVT.MC.options.hudHidden) {
 			return true;
 		}
 

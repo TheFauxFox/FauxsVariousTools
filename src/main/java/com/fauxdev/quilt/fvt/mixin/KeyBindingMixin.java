@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.fauxdev.quilt.fvt.utils.IKeyBinding;
-import com.mojang.blaze3d.platform.InputUtil;
-import net.minecraft.client.option.KeyBind;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,15 +20,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  *
  * @author Flourick
  */
-@Mixin(KeyBind.class)
-abstract class KeyBindMixin implements IKeyBinding
+@Mixin(KeyBinding.class)
+abstract class KeyBindingMixin implements IKeyBinding
 {
 	@Shadow
 	private boolean pressed;
 
 	@Final
 	@Shadow
-	private static Map<InputUtil.Key, KeyBind> KEY_BINDS_BY_KEY;
+	private static Map<InputUtil.Key, KeyBinding> KEY_TO_BINDINGS;
 
 	private List<FVT_KeyDownListener> keyDownListeners = new ArrayList<>();
 	private List<FVT_KeyUpListener> keyUpListeners = new ArrayList<>();
@@ -62,14 +62,14 @@ abstract class KeyBindMixin implements IKeyBinding
 	@Inject(method = "setKeyPressed", at = @At("HEAD"))
 	private static void onSetKeyPressed(InputUtil.Key key, boolean pressed, CallbackInfo info)
 	{
-		KeyBind keyBinding = KEY_BINDS_BY_KEY.get(key);
+		KeyBinding keyBinding = KEY_TO_BINDINGS.get(key);
 
 		if(keyBinding != null) {
 			if(pressed && !keyBinding.isPressed()) {
-				((KeyBindMixin)(Object)keyBinding).FVT_onKeyDownEvent();
+				((KeyBindingMixin)(Object)keyBinding).FVT_onKeyDownEvent();
 			}
 			else if(!pressed) {
-				((KeyBindMixin)(Object)keyBinding).FVT_onKeyUpEvent();
+				((KeyBindingMixin)(Object)keyBinding).FVT_onKeyUpEvent();
 			}
 		}
 	}

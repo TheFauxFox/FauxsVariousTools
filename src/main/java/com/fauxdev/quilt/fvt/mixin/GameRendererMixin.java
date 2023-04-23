@@ -20,7 +20,7 @@ abstract class GameRendererMixin
 	@Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
 	private void removeHandRendering(CallbackInfo info)
 	{
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			info.cancel();
 		}
 	}

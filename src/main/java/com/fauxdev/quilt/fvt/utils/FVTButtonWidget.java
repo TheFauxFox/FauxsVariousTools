@@ -21,14 +21,14 @@ public class FVTButtonWidget extends ButtonWidget
 
 	public FVTButtonWidget(int x, int y, int width, int height, Text message, ButtonWidget.PressAction onPress)
 	{
-		super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
+		super(x, y, width, height, message, onPress, DEFAULT_NARRATION_SUPPLIER);
 		this.messageColor = Color.WHITE;
 		this.buttonColor = Color.WHITE;
 	}
 
 	public FVTButtonWidget(int x, int y, int width, int height, Text message, ButtonWidget.PressAction onPress, Color buttonColor, Color messageColor)
 	{
-		super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
+		super(x, y, width, height, message, onPress, DEFAULT_NARRATION_SUPPLIER);
 		this.messageColor = messageColor;
 		this.buttonColor = buttonColor;
 	}
@@ -38,7 +38,7 @@ public class FVTButtonWidget extends ButtonWidget
 		int i = 1;
 		if (!this.active) {
 			i = 0;
-		} else if (this.isHoveredOrFocused()) {
+		} else if (this.isHovered()) {
 			i = 2;
 		}
 
@@ -47,11 +47,11 @@ public class FVTButtonWidget extends ButtonWidget
 
 	// YEP, had to make it my own so not only custom width is supported but also custom height
 	@Override
-	public void drawWidget(MatrixStack matrices, int mouseX, int mouseY, float delta)
+	public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
 	{
 		int textureOffset = getTextureY();
 
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShader(GameRenderer::getPositionTexProgram);
 		RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
 		RenderSystem.setShaderColor(buttonColor.getNormRed(), buttonColor.getNormGreen(), buttonColor.getNormBlue(), buttonColor.getNormAlpha());
 		RenderSystem.enableBlend();
@@ -68,7 +68,7 @@ public class FVTButtonWidget extends ButtonWidget
 		drawTexture(matrices, this.getX() + this.width / 2, this.getY() + this.height / 2, 200 - this.width / 2, 66 - this.height / 2 + textureOffset * 20, this.width / 2, this.height / 2);
 
 		// title
-		drawCenteredText(matrices, FVT.MC.textRenderer, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, messageColor.getPacked());
+		drawCenteredTextWithShadow(matrices, FVT.MC.textRenderer, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, messageColor.getPacked());
 	}
 
 	public Color getMessageColor()

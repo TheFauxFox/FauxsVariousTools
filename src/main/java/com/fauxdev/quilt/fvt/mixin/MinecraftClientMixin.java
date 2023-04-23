@@ -38,7 +38,7 @@ abstract class MinecraftClientMixin {
 	@Inject(method = "doAttack", at = @At("HEAD"), cancellable = true)
 	private void onDoAttack(CallbackInfoReturnable<Boolean> info)
 	{
-		if(FVT.OPTIONS.noToolBreaking.get() && !FVT.INSTANCE.isToolBreakingOverriden()) {
+		if(FVT.OPTIONS.noToolBreaking.getValue() && !FVT.INSTANCE.isToolBreakingOverriden()) {
 			ItemStack mainHandItem = player.getMainHandStack();
 
 			if(mainHandItem.isDamaged()) {
@@ -60,14 +60,14 @@ abstract class MinecraftClientMixin {
 			}
 		}
 
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			info.setReturnValue(false);
 		}
 	}
 
 	@Inject(method = "handleBlockBreaking", at = @At("HEAD"), cancellable = true)
 	private void onHandleBlockBreaking(boolean bl, CallbackInfo info) {
-		if(FVT.OPTIONS.noToolBreaking.get() && !FVT.INSTANCE.isToolBreakingOverriden()) {
+		if(FVT.OPTIONS.noToolBreaking.getValue() && !FVT.INSTANCE.isToolBreakingOverriden()) {
 			ItemStack mainHandItem = player.getMainHandStack();
 
 			if(mainHandItem.isDamaged()) {
@@ -89,14 +89,14 @@ abstract class MinecraftClientMixin {
 			}
 		}
 
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			info.cancel();
 		}
 	}
 
 	@Inject(method = "doItemUse", at = @At("HEAD"), cancellable = true)
 	private void onDoItemUseBefore(CallbackInfo info) {
-		if(FVT.OPTIONS.noToolBreaking.get() && !FVT.INSTANCE.isToolBreakingOverriden()) {
+		if(FVT.OPTIONS.noToolBreaking.getValue() && !FVT.INSTANCE.isToolBreakingOverriden()) {
 			ItemStack mainHandItem = player.getStackInHand(Hand.MAIN_HAND).isEmpty() ? null : player.getStackInHand(Hand.MAIN_HAND);
 			ItemStack offHandItem = player.getStackInHand(Hand.OFF_HAND).isEmpty() ? null : player.getStackInHand(Hand.OFF_HAND);
 
@@ -147,14 +147,14 @@ abstract class MinecraftClientMixin {
 			}
 		}
 
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			info.cancel();
 		}
 	}
 
 	@Inject(method = "hasOutline", at = @At("HEAD"), cancellable = true)
 	private void onHasOutline(Entity entity, CallbackInfoReturnable<Boolean> info) {
-		if(FVT.OPTIONS.entityOutline.get() && entity.getType() != EntityType.PLAYER || (FVT.OPTIONS.freecam.get() && entity.equals(FVT.MC.player) && !FVT.MC.options.hudHidden)) {
+		if(FVT.OPTIONS.entityOutline.getValue() && entity.getType() != EntityType.PLAYER || (FVT.OPTIONS.freecam.getValue() && entity.equals(FVT.MC.player) && !FVT.MC.options.hudHidden)) {
 			info.setReturnValue(true);
 		}
 	}

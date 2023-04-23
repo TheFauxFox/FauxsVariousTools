@@ -3,19 +3,18 @@ package com.fauxdev.quilt.fvt;
 import com.fauxdev.quilt.fvt.settings.FVTOptions;
 import com.fauxdev.quilt.fvt.settings.FVTSettingsScreen;
 import com.fauxdev.quilt.fvt.utils.FVTVars;
-import com.mojang.blaze3d.platform.InputUtil;
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBind;
-import net.minecraft.client.option.Option;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.option.SimpleOption;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
-import org.quiltmc.loader.api.ModContainer;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import org.quiltmc.qsl.base.api.entrypoint.client.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,10 +28,10 @@ public class FVT implements ClientModInitializer {
 	public static FVTOptions OPTIONS;
 	public static final FVTVars VARS = new FVTVars();
 
-	private KeyBind toolBreakingOverrideKeybind;
+	private KeyBinding toolBreakingOverrideKeybind;
 
 	@Override
-	public void onInitializeClient(ModContainer mod) {
+	public void onInitializeClient() {
 		LOGGER.info("FVT Loading");
 
 		INSTANCE = this;
@@ -48,12 +47,12 @@ public class FVT implements ClientModInitializer {
 		return toolBreakingOverrideKeybind.isPressed();
 	}
 
-	private void handleFeatureKeybindPress(KeyBind keybind, Option<Boolean> option, String key)
+	private void handleFeatureKeybindPress(KeyBinding keybind, SimpleOption<Boolean> option, String key)
 	{
 		while(keybind.wasPressed()) {
-			option.set(!option.get());
+			option.setValue(!option.getValue());
 
-			if(option.get()) {
+			if(option.getValue()) {
 				FVT.MC.inGameHud.getChatHud().addMessage(Text.translatable("fvt.chat_messages_prefix", Text.translatable("fvt.mod.enabled", Text.translatable(key))));
 			}
 			else {
@@ -64,13 +63,13 @@ public class FVT implements ClientModInitializer {
 
 	private void registerKeybinds()
 	{
-		KeyBind openSettingsMenuKeybind = KeyBindingHelper.registerKeyBinding(new KeyBind("fvt.options.open", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "FVT"));
-		toolBreakingOverrideKeybind = KeyBindingHelper.registerKeyBinding(new KeyBind("fvt.tool_breaking_override.name", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_ALT, "FVT"));
-		KeyBind fullbrightKeybind = KeyBindingHelper.registerKeyBinding(new KeyBind("fvt.fullbright.name", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "FVT"));
-		KeyBind freecamKeybind = KeyBindingHelper.registerKeyBinding(new KeyBind("fvt.freecam.name", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "FVT"));
-		KeyBind entityOutlineKeybind = KeyBindingHelper.registerKeyBinding(new KeyBind("fvt.entity_outline.name", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "FVT"));
+		KeyBinding openSettingsMenuKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding("fvt.options.open", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "FVT"));
+		toolBreakingOverrideKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding("fvt.tool_breaking_override.name", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_ALT, "FVT"));
+		KeyBinding fullbrightKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding("fvt.fullbright.name", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "FVT"));
+		KeyBinding freecamKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding("fvt.freecam.name", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "FVT"));
+		KeyBinding entityOutlineKeybind = KeyBindingHelper.registerKeyBinding(new KeyBinding("fvt.entity_outline.name", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "FVT"));
 
-		ClientTickEvents.END.register(client ->
+		ClientTickEvents.END_WORLD_TICK.register(client ->
 		{
 			while(openSettingsMenuKeybind.wasPressed()) {
 				FVT.MC.setScreen(new FVTSettingsScreen(FVT.MC.currentScreen));
@@ -84,17 +83,17 @@ public class FVT implements ClientModInitializer {
 
 	private void registerCallbacks()
 	{
-		ClientTickEvents.END.register(client ->
+		ClientTickEvents.START_WORLD_TICK.register(client ->
 		{
-			if(FVT.MC.player == null && FVT.OPTIONS.freecam.get()) {
+			if(FVT.MC.player == null && FVT.OPTIONS.freecam.getValue()) {
 				// disables freecam if leaving a world
-				FVT.OPTIONS.freecam.set(false);
+				FVT.OPTIONS.freecam.setValue(false);
 			}
 		});
 
-		ClientTickEvents.END.register(clientWorld ->
+		ClientTickEvents.END_WORLD_TICK.register(clientWorld ->
 		{
-			if(FVT.OPTIONS.toolWarning.get() && MC.player != null) {
+			if(FVT.OPTIONS.toolWarning.getValue() && MC.player != null) {
 				ItemStack mainHandItem = FVT.MC.player.getStackInHand(Hand.MAIN_HAND);
 				ItemStack offHandItem = FVT.MC.player.getStackInHand(Hand.OFF_HAND);
 

@@ -1,0 +1,27 @@
+{
+	"schemaVersion": 1,
+	"id": "fvt",
+	"version": "${version}",
+	"name": "Faux's Various Tools",
+	"description": "A collection of various tools I tend to use, without the useless bloat.",
+	"authors": [
+		"Faux"
+	],
+	"contact": {
+		"homepage": "https://github.com/TheFauxFox/FauxsVariousTools",
+		"issues": "https://github.com/TheFauxFox/FauxsVariousTools/issues",
+		"sources": "https://github.com/TheFauxFox/FauxsVariousTools"
+	},
+	"icon": "assets/fvt/icon.png",
+	"entrypoints": {
+		"client": ["com.fauxdev.quilt.fvt.FVT"],
+		"modmenu": ["com.fauxdev.quilt.fvt.settings.ModMenuSettingsImpl"]
+	},
+	"depends": {
+		"fabricloader": ">=0.14.17",
+		"fabric-api": "*",
+		"minecraft": "~1.19.4",
+		"java": ">=17"
+	},
+	"mixins": ["fvt.mixins.json"]
+}

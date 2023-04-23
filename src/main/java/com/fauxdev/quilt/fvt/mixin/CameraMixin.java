@@ -44,7 +44,7 @@ abstract class CameraMixin
 	private void onUpdate(BlockView area, Entity focusedEntity, boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo info)
 	{
 		// freecam
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			if(FVT_preFreecam) {
 				FVT_preFreecam = false;
 
@@ -90,7 +90,7 @@ abstract class CameraMixin
 	@Inject(method = "isThirdPerson", at = @At("HEAD"), cancellable = true)
 	private void onIsThirdPerson(CallbackInfoReturnable<Boolean> info)
 	{
-		if(FVT.OPTIONS.freecam.get()) {
+		if(FVT.OPTIONS.freecam.getValue()) {
 			info.setReturnValue(true);
 		}
 	}

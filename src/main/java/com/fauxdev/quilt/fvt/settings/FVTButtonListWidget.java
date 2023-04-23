@@ -15,7 +15,7 @@ import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.client.option.Option;
+import net.minecraft.client.option.SimpleOption;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -38,17 +38,17 @@ public class FVTButtonListWidget extends ElementListWidget<FVTButtonListWidget.F
 		this.addEntry(FVTButtonEntry.create(width, Text.translatable(key).formatted(Formatting.BOLD)));
 	}
 
-	public void addOptionEntry(Option<?> first)
+	public void addOptionEntry(SimpleOption<?> first)
 	{
 		this.addEntry(FVTButtonEntry.create(this.width, first));
 	}
 
-	public void addOptionEntry(Option<?> first, Option<?> second)
+	public void addOptionEntry(SimpleOption<?> first, SimpleOption<?> second)
 	{
 		this.addEntry(FVTButtonEntry.create(this.width, first, second));
 	}
 
-	public void addOptionEntry(Option<?>[] options)
+	public void addOptionEntry(SimpleOption<?>[] options)
 	{
 		this.addEntry(FVTButtonEntry.create(this.width, options));
 	}
@@ -75,7 +75,7 @@ public class FVTButtonListWidget extends ElementListWidget<FVTButtonListWidget.F
 	{
 		private final List<ClickableWidget> buttons;
 
-		private FVTButtonEntry(Map<Option<?>, ClickableWidget> optionsToButtons)
+		private FVTButtonEntry(Map<SimpleOption<?>, ClickableWidget> optionsToButtons)
 		{
 			this.buttons = ImmutableList.copyOf(optionsToButtons.values());
 		}
@@ -92,32 +92,32 @@ public class FVTButtonListWidget extends ElementListWidget<FVTButtonListWidget.F
 		}
 
 		// single button row
-		public static FVTButtonEntry create(int width, Option<?> option)
+		public static FVTButtonEntry create(int width, SimpleOption<?> option)
 		{
-			return new FVTButtonEntry(ImmutableMap.of(option, option.method_18520(FVT.MC.options, width / 2 - 155, 0, 310)));
+			return new FVTButtonEntry(ImmutableMap.of(option, option.createWidget(FVT.MC.options, width / 2 - 155, 0, 310)));
 		}
 
 		// two buttons next to each other, kept for simplicity so that the dynamic create does not have to be used for every row
-		public static FVTButtonEntry create(int width, Option<?> firstOption, Option<?> secondOption)
+		public static FVTButtonEntry create(int width, SimpleOption<?> firstOption, SimpleOption<?> secondOption)
 		{
-			return new FVTButtonEntry(ImmutableMap.of(firstOption, firstOption.method_18520(FVT.MC.options, width / 2 - 155, 0, 150), secondOption, secondOption.method_18520(FVT.MC.options, width / 2 - 155 + 160, 0, 150)));
+			return new FVTButtonEntry(ImmutableMap.of(firstOption, firstOption.createWidget(FVT.MC.options, width / 2 - 155, 0, 150), secondOption, secondOption.createWidget(FVT.MC.options, width / 2 - 155 + 160, 0, 150)));
 		}
 
 		// dynamically makes a button entry based on how many options are given, null values can be used to make empty spaces
-		public static FVTButtonEntry create(int width, Option<?>[] options)
+		public static FVTButtonEntry create(int width, SimpleOption<?>[] options)
 		{
-			final ImmutableMap.Builder<Option<?>, ClickableWidget> builder = ImmutableMap.builder();
+			final ImmutableMap.Builder<SimpleOption<?>, ClickableWidget> builder = ImmutableMap.builder();
 
 			float buttonWidth = (310.0f - 10.0f*(options.length - 1)) / (float)options.length;
 			float pixelAdjustment = options.length * (buttonWidth - MathHelper.floor(buttonWidth));
 
 			for(int i = 0; i < options.length; i++) {
-				Option<?> option = options[i];
+				SimpleOption<?> option = options[i];
 
 				if(option != null) {
 					int adjustment = pixelAdjustment > 0.5f && i == options.length - 1 ? Math.round(pixelAdjustment) : 0;
 
-					builder.put(option, option.method_18520(FVT.MC.options, width / 2 - 155 + (i * (MathHelper.floor(buttonWidth) + 10)) + adjustment, 0, MathHelper.floor(buttonWidth)));
+					builder.put(option, option.createWidget(FVT.MC.options, width / 2 - 155 + (i * (MathHelper.floor(buttonWidth) + 10)) + adjustment, 0, MathHelper.floor(buttonWidth)));
 				}
 			}
 
@@ -158,9 +158,9 @@ public class FVTButtonListWidget extends ElementListWidget<FVTButtonListWidget.F
 		}
 
 		@Override
-		public void drawWidget(MatrixStack matrices, int mouseX, int mouseY, float delta)
+		public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
 		{
-			ClickableWidget.drawCenteredText(matrices, FVT.MC.textRenderer, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, Color.WHITE.getPacked());
+			ClickableWidget.drawCenteredTextWithShadow(matrices, FVT.MC.textRenderer, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, Color.WHITE.getPacked());
 		}
 
 		@Override
@@ -170,7 +170,7 @@ public class FVTButtonListWidget extends ElementListWidget<FVTButtonListWidget.F
 		}
 
 		@Override
-		protected void updateNarration(NarrationMessageBuilder builder)
+		protected void appendClickableNarrations(NarrationMessageBuilder builder)
 		{
 			this.appendDefaultNarrations(builder);
 		}

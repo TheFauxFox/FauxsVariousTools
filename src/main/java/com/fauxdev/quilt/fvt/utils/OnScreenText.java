@@ -62,11 +62,11 @@ public class OnScreenText
 		int alpha = MathHelper.clamp(MathHelper.ceil(25.5f * FVT.VARS.getToolWarningTextTicksLeft()), 0, 255);
 
 		int y;
-		if(FVT.OPTIONS.toolWarningPosition.get() == FVTOptions.ToolWarningPosition.TOP) {
-			y = (int)((-(FVT.MC.getWindow().getScaledHeight() / 2 * 1/FVT.OPTIONS.toolWarningScale.get())) + (2/FVT.OPTIONS.toolWarningScale.get()));
+		if(FVT.OPTIONS.toolWarningPosition.getValue() == FVTOptions.ToolWarningPosition.TOP) {
+			y = (int)((-(FVT.MC.getWindow().getScaledHeight() / 2 * 1/FVT.OPTIONS.toolWarningScale.getValue())) + (2/FVT.OPTIONS.toolWarningScale.getValue()));
 		}
 		else {
-			y = (int)(((FVT.MC.getWindow().getScaledHeight() / 2 * 1/FVT.OPTIONS.toolWarningScale.get())) - (FVT.MC.textRenderer.fontHeight + 60/FVT.OPTIONS.toolWarningScale.get()));
+			y = (int)(((FVT.MC.getWindow().getScaledHeight() / 2 * 1/FVT.OPTIONS.toolWarningScale.getValue())) - (FVT.MC.textRenderer.fontHeight + 60/FVT.OPTIONS.toolWarningScale.getValue()));
 		}
 
 		final String ToolWarningText = FVT.VARS.toolHand.equals(Hand.MAIN_HAND) ? Text.translatable("fvt.tool_warning.text.main_hand", FVT.VARS.toolDurability).getString() : Text.translatable("fvt.tool_warning.text.offhand", FVT.VARS.toolDurability).getString();
@@ -77,7 +77,7 @@ public class OnScreenText
 
 	private static int getBlockLightLevel()
 	{
-		return FVT.MC.world.getChunkManager().getLightingProvider().get(LightType.BLOCK).getLightLevel(FVT.OPTIONS.freecam.get() ? new BlockPos((int)FVT.MC.gameRenderer.getCamera().getPos().x, (int)FVT.MC.gameRenderer.getCamera().getPos().y, (int)FVT.MC.gameRenderer.getCamera().getPos().z)  : FVT.MC.getCameraEntity().getBlockPos());
+		return FVT.MC.world.getChunkManager().getLightingProvider().get(LightType.BLOCK).getLightLevel(FVT.OPTIONS.freecam.getValue() ? new BlockPos((int)FVT.MC.gameRenderer.getCamera().getPos().x, (int)FVT.MC.gameRenderer.getCamera().getPos().y, (int)FVT.MC.gameRenderer.getCamera().getPos().z)  : FVT.MC.getCameraEntity().getBlockPos());
 	}
 
 	private static String getFacingDirection()
@@ -87,16 +87,16 @@ public class OnScreenText
 
 	private static double getCurrentX()
 	{
-		return FVT.OPTIONS.freecam.get() ? FVT.MC.gameRenderer.getCamera().getPos().x : FVT.MC.player.getX();
+		return FVT.OPTIONS.freecam.getValue() ? FVT.MC.gameRenderer.getCamera().getPos().x : FVT.MC.player.getX();
 	}
 
 	private static double getCurrentY()
 	{
-		return FVT.OPTIONS.freecam.get() ? FVT.MC.gameRenderer.getCamera().getPos().y : FVT.MC.player.getY();
+		return FVT.OPTIONS.freecam.getValue() ? FVT.MC.gameRenderer.getCamera().getPos().y : FVT.MC.player.getY();
 	}
 
 	private static double getCurrentZ()
 	{
-		return FVT.OPTIONS.freecam.get() ? FVT.MC.gameRenderer.getCamera().getPos().z : FVT.MC.player.getZ();
+		return FVT.OPTIONS.freecam.getValue() ? FVT.MC.gameRenderer.getCamera().getPos().z : FVT.MC.player.getZ();
 	}
 }

@@ -1,6 +1,7 @@
 plugins {
+	id 'fabric-loom' version '1.1-SNAPSHOT'
 	id 'maven-publish'
-	alias libs.plugins.quilt.loom
+//	alias libs.plugins.quilt.loom
 }
 
 archivesBaseName = project.archives_base_name
@@ -22,8 +23,8 @@ repositories {
 // All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
 // See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
 dependencies {
-	minecraft libs.minecraft
-	mappings variantOf(libs.quilt.mappings) { classifier 'intermediary-v2' }
+//	minecraft libs.minecraft
+//	mappings variantOf(libs.quilt.mappings) { classifier 'intermediary-v2' }
 	// Replace the above line with the block below if you want to use Mojang mappings as your primary mappings, falling back on QM for parameters and Javadocs
 	/*
 	mappings loom.layered {
@@ -31,23 +32,34 @@ dependencies {
 		officialMojangMappings()
 	}
 	*/
-	modImplementation libs.quilt.loader
+//	modImplementation libs.quilt.loader
 
 	// QSL is not a complete API; You will need Quilted Fabric API to fill in the gaps.
 	// Quilted Fabric API will automatically pull in the correct QSL version.
-	modImplementation libs.quilted.fabric.api
+//	modImplementation libs.quilted.fabric.api
 	// modImplementation libs.bundles.quilted.fabric.api // If you wish to use Fabric API's deprecated modules, you can replace the above line with this one
+
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		transitive = false
 	}
 }
 
+base {
+	archivesName = project.archives_base_name
+}
+
 processResources {
 	inputs.property 'version', version
 
-	filesMatching('quilt.mod.json') {
-		expand "version": version
+	filesMatching('fabric.mod.json') {
+		expand "version": project.version
 	}
 }
 
@@ -75,7 +87,7 @@ java {
 // If you plan to use a different file for the license, don't forget to change the file name here!
 jar {
 	from('LICENSE') {
-		rename { "${it}_${archivesBaseName}" }
+		rename { "${it}_${base.archivesName.get()}" }
 	}
 }
 

@@ -7,12 +7,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.option.Option;
-import net.minecraft.text.ScreenTexts;
+import net.minecraft.client.option.SimpleOption;
+import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.text.Texts;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.OptionEnum;
+import net.minecraft.util.TranslatableOption;
 import net.minecraft.util.math.MathHelper;
 
 import java.io.*;
@@ -24,64 +24,64 @@ import java.util.*;
 public class FVTOptions {
 
 	private final File file;
-	private final Map<String, Option<?>> mods;
+	private final Map<String, SimpleOption<?>> mods;
 
 	/* Mod setup */
-	public final Option<Boolean> noToolBreaking, toolWarning, entityOutline, fullbright, freecam;
-	public final Option<Double> toolWarningScale;
-	public final Option<ToolWarningPosition> toolWarningPosition;
+	public final SimpleOption<Boolean> noToolBreaking, toolWarning, entityOutline, fullbright, freecam;
+	public final SimpleOption<Double> toolWarningScale;
+	public final SimpleOption<ToolWarningPosition> toolWarningPosition;
 
 	public FVTOptions() {
 		this.file = new File(FVT.MC.runDirectory, "config/FauxVT.properties");
 		this.mods = new HashMap<>();
 
-		noToolBreaking = Option.ofBoolean(
+		noToolBreaking = SimpleOption.ofBoolean(
 			"fvt.noToolBreaking.name",
 			tooltip("fvt.noToolBreaking.tooltip", true),
 			true
 		);
 		mods.put("noToolBreaking", noToolBreaking);
 
-		toolWarning = Option.ofBoolean(
+		toolWarning = SimpleOption.ofBoolean(
 			"fvt.tool_warning.name",
 			tooltip("fvt.tool_warning.tooltip", true),
 			true
 		);
 		mods.put("tool_warning", toolWarning);
 
-		toolWarningScale = new Option<>(
+		toolWarningScale = new SimpleOption<>(
 			"fvt.tool_warning.scale.name",
 			tooltip("fvt.tool_warning.scale.tooltip", 1.5),
 			FVTOptions::getPercentValueText,
-			new Option.IntRangeValueSet(0, 80).withModifier(value -> (double)value / 20.0, value -> (int)(value * 20.0)),
+			new SimpleOption.ValidatingIntSliderCallbacks(0, 80).withModifier(value -> (double)value / 20.0, value -> (int)(value * 20.0)),
 			Codec.doubleRange(0.0, 4.0), 1.5, value -> {}
 		);
 		mods.put("toolWarningScale", toolWarningScale);
 
-		toolWarningPosition = new Option<>(
+		toolWarningPosition = new SimpleOption<>(
 			"fvt.tool_warning.position.name",
 			tooltip("fvt.tool_warning.position.tooltip", ToolWarningPosition.BOTTOM),
-			Option.optionEnumText(),
-			new Option.EnumValueSet<>(Arrays.asList(ToolWarningPosition.values()),
+			SimpleOption.enumValueText(),
+			new SimpleOption.PotentialValuesBasedCallbacks<>(Arrays.asList(ToolWarningPosition.values()),
 			Codec.INT.xmap(ToolWarningPosition::byId, ToolWarningPosition::getId)), ToolWarningPosition.BOTTOM, value -> {}
 		);
 		mods.put("tool_warning.position", toolWarningPosition);
 
-		entityOutline = Option.ofBoolean(
+		entityOutline = SimpleOption.ofBoolean(
 			"fvt.entity_outline.name",
 			tooltip("fvt.entity_outline.tooltip", false),
 			false
 		);
 		mods.put("entityOutline", entityOutline);
 
-		fullbright = Option.ofBoolean(
+		fullbright = SimpleOption.ofBoolean(
 			"fvt.fullbright.name",
 			tooltip("fvt.fullbright.tooltip", false),
 			false
 		);
 		mods.put("fullbright", fullbright);
 
-		freecam = Option.ofBoolean(
+		freecam = SimpleOption.ofBoolean(
 			"fvt.freecam.name",
 			tooltip("fvt.freecam.tooltip", false),
 			false
@@ -90,7 +90,7 @@ public class FVTOptions {
 		init();
 	}
 
-	private static <T> Option.TooltipSupplier<T> tooltip(String key, T defaultValue)
+	private static <T> SimpleOption.TooltipFactory<T> tooltip(String key, T defaultValue)
 	{
 		return value -> {
 			List<Text> lines = new ArrayList<>();
@@ -103,14 +103,14 @@ public class FVTOptions {
 			else if(defaultValue instanceof Boolean) {
 				lines.add(Text.translatable("fvt.mod.default", (boolean)defaultValue ? ScreenTexts.ON : ScreenTexts.OFF).formatted(Formatting.GRAY));
 			}
-			else if(defaultValue instanceof OptionEnum) {
-				lines.add(Text.translatable("fvt.mod.default", ((OptionEnum) defaultValue).getTranslationKey()).formatted(Formatting.GRAY));
+			else if(defaultValue instanceof TranslatableOption) {
+				lines.add(Text.translatable("fvt.mod.default", ((TranslatableOption) defaultValue).getTranslationKey()).formatted(Formatting.GRAY));
 			}
 			else {
 				lines.add(Text.translatable("fvt.mod.default", defaultValue).formatted(Formatting.GRAY));
 			}
 
-			return Tooltip.create(Texts.join(lines, Text.of("\n")));
+			return Tooltip.of(Texts.join(lines, Text.of("\n")));
 		};
 	}
 
@@ -133,7 +133,7 @@ public class FVTOptions {
 		return Text.translatable("options.percent_value", prefix, (int)(value * 100.0));
 	}
 
-	public enum ToolWarningPosition implements OptionEnum
+	public enum ToolWarningPosition implements TranslatableOption
 	{
 		TOP(0, "fvt.tool_warning.position.top"),
 		BOTTOM(1, "fvt.tool_warning.position.bottom");
@@ -170,14 +170,14 @@ public class FVTOptions {
 	}
 
 	@SuppressWarnings({"unchecked"})
-	private <T> void resetFeature(Option<T> mod)
+	private <T> void resetFeature(SimpleOption<T> mod)
 	{
 		((ISimpleOption<T>)(Object) mod).FVT_setValueToDefault();
 	}
 
 	public void reset()
 	{
-		for(Option<?> mod : mods.values()) {
+		for(SimpleOption<?> mod : mods.values()) {
 			resetFeature(mod);
 		}
 	}
@@ -188,8 +188,8 @@ public class FVTOptions {
 			printWriter.println("# FVT configuration. Do not edit here unless you know what you're doing!");
 			printWriter.println("# Last save: " + DateTimeFormatter.ofPattern("HH:mm:ss dd.MM.yyyy").format(LocalDateTime.now()));
 
-			for(Map.Entry<String, Option<?>> mod : mods.entrySet()) {
-				printWriter.println(mod.getKey() + "=" + mod.getValue().get());
+			for(Map.Entry<String, SimpleOption<?>> mod : mods.entrySet()) {
+				printWriter.println(mod.getKey() + "=" + mod.getValue().getValue());
 			}
 		}
 		catch(Exception e) {
@@ -197,11 +197,11 @@ public class FVTOptions {
 		}
 	}
 
-	private <T> void parseFeatureLine(Option<T> option, String value)
+	private <T> void parseFeatureLine(SimpleOption<T> option, String value)
 	{
 		DataResult<T> dataResult = option.getCodec().parse(JsonOps.INSTANCE, JsonParser.parseString(value));
 		dataResult.error().ifPresent(partialResult -> FVT.LOGGER.warn("Skipping bad config option (" + value + "): " + partialResult.message()));
-		dataResult.result().ifPresent(option::set);
+		dataResult.result().ifPresent(option::setValue);
 	}
 
 	private void read()
@@ -223,7 +223,7 @@ public class FVTOptions {
 				String key = v[0];
 				String value = v[1];
 
-				Option<?> option = mods.get(key);
+				SimpleOption<?> option = mods.get(key);
 
 				if(option == null || value.isEmpty()) {
 					FVT.LOGGER.warn("Skipping bad config option (" + value + ")" + " for " + key);
