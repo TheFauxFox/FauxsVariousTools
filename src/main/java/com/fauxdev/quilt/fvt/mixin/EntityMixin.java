@@ -31,7 +31,7 @@ abstract class EntityMixin
 	private int id;
 
 	@Shadow
-	public World world;
+	private World world;
 
 	@Shadow
 	public abstract Text getName();

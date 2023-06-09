@@ -30,8 +30,8 @@ abstract class KeyBindingMixin implements IKeyBinding
 	@Shadow
 	private static Map<InputUtil.Key, KeyBinding> KEY_TO_BINDINGS;
 
-	private List<FVT_KeyDownListener> keyDownListeners = new ArrayList<>();
-	private List<FVT_KeyUpListener> keyUpListeners = new ArrayList<>();
+	private final List<FVT_KeyDownListener> keyDownListeners = new ArrayList<>();
+	private final List<FVT_KeyUpListener> keyUpListeners = new ArrayList<>();
 
 	private void FVT_onKeyDownEvent()
 	{

@@ -1,5 +1,6 @@
 package com.fauxdev.quilt.fvt.utils;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 
 /**
@@ -9,5 +10,5 @@ import net.minecraft.client.util.math.MatrixStack;
  */
 public interface IClickableWidget
 {
-	public void FVT_renderWithoutTooltip(MatrixStack matrices, int mouseX, int mouseY, float delta);
+	public void FVT_renderWithoutTooltip(DrawContext context, int mouseX, int mouseY, float delta);
 }

@@ -3,6 +3,7 @@ package com.fauxdev.quilt.fvt.utils;
 
 import com.fauxdev.quilt.fvt.FVT;
 import com.fauxdev.quilt.fvt.settings.FVTOptions;
+import net.minecraft.client.gui.DrawContext;
 import org.apache.commons.lang3.StringUtils;
 
 import net.minecraft.client.util.math.MatrixStack;
@@ -20,43 +21,7 @@ import net.minecraft.world.LightType;
  */
 public class OnScreenText
 {
-	public static void drawCoordinatesTextLower(MatrixStack matrixStack)
-	{
-		final String curLocText = String.format("XYZ: %.01f %.01f %.01f", getCurrentX(), getCurrentY(), getCurrentZ());
-		FVT.MC.textRenderer.drawWithShadow(matrixStack, curLocText, 2, FVT.MC.getWindow().getScaledHeight() - FVT.MC.textRenderer.fontHeight, Color.WHITE.getPacked());
-	}
-
-	public static void drawCoordinatesTextUpper(MatrixStack matrixStack)
-	{
-		final String curLocText = String.format("XYZ: %.01f %.01f %.01f", getCurrentX(), getCurrentY(), getCurrentZ());
-		FVT.MC.textRenderer.drawWithShadow(matrixStack, curLocText, 2, 2, Color.WHITE.getPacked());
-	}
-
-	public static void drawPFTextLower(MatrixStack matrixStack)
-	{
-		final String PFText = String.format("P: %.02f (%s)", FVT.MC.gameRenderer.getCamera().getPitch(), getFacingDirection());
-		FVT.MC.textRenderer.drawWithShadow(matrixStack, PFText, FVT.MC.getWindow().getScaledWidth() - FVT.MC.textRenderer.getWidth(PFText) - 1, FVT.MC.getWindow().getScaledHeight() - FVT.MC.textRenderer.fontHeight, Color.WHITE.getPacked());
-	}
-
-	public static void drawPFTextUpper(MatrixStack matrixStack)
-	{
-		final String PFText = String.format("P: %.02f (%s)", FVT.MC.gameRenderer.getCamera().getPitch(), getFacingDirection());
-		FVT.MC.textRenderer.drawWithShadow(matrixStack, PFText, FVT.MC.getWindow().getScaledWidth() - FVT.MC.textRenderer.getWidth(PFText) - 1, 2, Color.WHITE.getPacked());
-	}
-
-	public static void drawLightLevelTextLower(MatrixStack matrixStack)
-	{
-		final String curYPRText = String.format("BL: %d", getBlockLightLevel());
-		FVT.MC.textRenderer.drawWithShadow(matrixStack, curYPRText, FVT.MC.getWindow().getScaledWidth() - FVT.MC.textRenderer.getWidth(curYPRText) - 1, FVT.MC.getWindow().getScaledHeight() - 2*FVT.MC.textRenderer.fontHeight - 1, Color.WHITE.getPacked());
-	}
-
-	public static void drawLightLevelTextUpper(MatrixStack matrixStack)
-	{
-		final String curYPRText = String.format("BL: %d", getBlockLightLevel());
-		FVT.MC.textRenderer.drawWithShadow(matrixStack, curYPRText, FVT.MC.getWindow().getScaledWidth() - FVT.MC.textRenderer.getWidth(curYPRText) - 1, FVT.MC.textRenderer.fontHeight + 3, Color.WHITE.getPacked());
-	}
-
-	public static void drawToolWarningText(MatrixStack matrixStack)
+	public static void drawToolWarningText(DrawContext context)
 	{
 		// last half a second fade-out
 		int alpha = MathHelper.clamp(MathHelper.ceil(25.5f * FVT.VARS.getToolWarningTextTicksLeft()), 0, 255);
@@ -70,7 +35,7 @@ public class OnScreenText
 		}
 
 		final String ToolWarningText = FVT.VARS.toolHand.equals(Hand.MAIN_HAND) ? Text.translatable("fvt.tool_warning.text.main_hand", FVT.VARS.toolDurability).getString() : Text.translatable("fvt.tool_warning.text.offhand", FVT.VARS.toolDurability).getString();
-		FVT.MC.textRenderer.drawWithShadow(matrixStack, ToolWarningText, (float) -(FVT.MC.textRenderer.getWidth(ToolWarningText) / 2), y, new Color(alpha, 255, 0, 0).getPacked());
+		context.drawTextWithShadow(FVT.MC.textRenderer, ToolWarningText, (int) -(FVT.MC.textRenderer.getWidth(ToolWarningText) / 2), y, new Color(alpha, 255, 0, 0).getPacked());
 	}
 
 	// FUNCTIONS TO GET VARIOUS VALUES TO HUD

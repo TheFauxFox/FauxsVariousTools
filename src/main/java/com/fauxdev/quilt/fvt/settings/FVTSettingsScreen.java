@@ -2,6 +2,7 @@ package com.fauxdev.quilt.fvt.settings;
 
 import com.fauxdev.quilt.fvt.FVT;
 import com.fauxdev.quilt.fvt.utils.Color;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -87,13 +88,13 @@ public class FVTSettingsScreen extends Screen
 	}
 
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float delta)
+	public void render(DrawContext context, int mouseX, int mouseY, float delta)
 	{
-		this.renderBackground(matrixStack);
-		this.list.render(matrixStack, mouseX, mouseY, delta);
-		drawCenteredTextWithShadow(matrixStack, this.textRenderer, this.title, this.width / 2, 12, Color.WHITE.getPacked());
+		this.renderBackground(context);
+		this.list.render(context, mouseX, mouseY, delta);
+		context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 12, Color.WHITE.getPacked());
 
-		super.render(matrixStack, mouseX, mouseY, delta);
+		super.render(context, mouseX, mouseY, delta);
 	}
 
 	@Override

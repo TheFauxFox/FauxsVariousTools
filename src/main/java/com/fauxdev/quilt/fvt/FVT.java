@@ -97,7 +97,7 @@ public class FVT implements ClientModInitializer {
 				ItemStack mainHandItem = FVT.MC.player.getStackInHand(Hand.MAIN_HAND);
 				ItemStack offHandItem = FVT.MC.player.getStackInHand(Hand.OFF_HAND);
 
-				int mainHandDurability = mainHandItem.getMaxDamage() - mainHandItem.getDamage();;
+				int mainHandDurability = mainHandItem.getMaxDamage() - mainHandItem.getDamage();
 				int offHandDurability = offHandItem.getMaxDamage() - offHandItem.getDamage();
 
 				if(mainHandItem.isDamaged() && mainHandItem != FVT.VARS.mainHandToolItemStack) {

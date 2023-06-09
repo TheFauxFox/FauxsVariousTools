@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -124,17 +125,18 @@ public class FVTButtonListWidget extends ElementListWidget<FVTButtonListWidget.F
 			return new FVTButtonEntry(builder.build());
 		}
 
-		public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta)
+		@Override
+		public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta)
 		{
 			this.buttons.forEach((button) -> {
 				button.setY(y);
 
 				if(FVT.VARS.settingsShowTooltips) {
-					button.render(matrices, mouseX, mouseY, tickDelta);
+					button.render(context, mouseX, mouseY, tickDelta);
 				}
 				else {
 					// HACK: Noone can now override the render method, but eh, it's just for this menu anyway, right?
-					((IClickableWidget)button).FVT_renderWithoutTooltip(matrices, mouseX, mouseY, tickDelta);
+					((IClickableWidget)button).FVT_renderWithoutTooltip(context, mouseX, mouseY, tickDelta);
 				}
 			});
 		}
@@ -158,9 +160,9 @@ public class FVTButtonListWidget extends ElementListWidget<FVTButtonListWidget.F
 		}
 
 		@Override
-		public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
+		public void renderButton(DrawContext context, int mouseX, int mouseY, float delta)
 		{
-			ClickableWidget.drawCenteredTextWithShadow(matrices, FVT.MC.textRenderer, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, Color.WHITE.getPacked());
+			context.drawCenteredTextWithShadow(FVT.MC.textRenderer, this.getMessage(), this.getX() + this.width / 2, this.getY() + (this.height - 8) / 2, Color.WHITE.getPacked());
 		}
 
 		@Override
